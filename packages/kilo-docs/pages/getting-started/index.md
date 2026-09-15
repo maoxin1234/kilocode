@@ -20,7 +20,7 @@ Your sessions sync across all of these, so you can start a task on your phone an
 
 ## What Kilo Can Do
 
-- [**Code with AI**](/docs/code-with-ai) — Generate, refactor, and debug code through natural conversation. Use specialized modes (Code, Architect, Debug, Ask) or create your own. Get inline suggestions with Autocomplete.
+- [**Code with AI**](/docs/code-with-ai) — Generate, refactor, and debug code through natural conversation. Use specialized agents (Code, Plan, Debug, Ask) or create your own. Get inline suggestions with Autocomplete.
 - [**Collaborate**](/docs/collaborate) — Share sessions, manage team settings, and track AI adoption across your organization.
 - [**Automate**](/docs/automate) — Set up AI-powered code reviews, triage agents, and auto-fixers that open new PRs based on issues.
 - [**Deploy & Secure**](/docs/deploy-secure) — Build and deploy apps directly from Kilo. Run security scans and manage issues with AI assistance.
@@ -28,7 +28,7 @@ Your sessions sync across all of these, so you can start a task on your phone an
 ## Quick Start
 
 1. [Install Kilo Code](/docs/getting-started/installing) in your preferred environment
-2. [Connect an AI provider](/docs/ai-providers) or use Kilo's built-in provider & credits
+2. [Set up authentication](/docs/getting-started/setup-authentication) or use Kilo's built-in provider
 3. [Run your first task](/docs/getting-started/quickstart)
 
 {% callout type="tip" %}

@@ -6,7 +6,7 @@ import { Switch } from "@kilocode/kilo-ui/switch"
 import { useConfig } from "../../context/config"
 import { useDisplay } from "../../context/display"
 import { useLanguage } from "../../context/language"
-import type { CodeEditDisplay, TerminalCommandDisplay } from "../../types/messages"
+import type { CodeEditDisplay, McpToolDisplay, ReasoningDisplay, TerminalCommandDisplay } from "../../types/messages"
 import SettingsRow from "./SettingsRow"
 
 interface LayoutOption {
@@ -24,8 +24,19 @@ const CODE_EDIT_OPTIONS: LayoutOption[] = [
   { value: "collapsed", labelKey: "settings.display.codeEdit.collapsed" },
 ]
 
+const MCP_OPTIONS: LayoutOption[] = [
+  { value: "expanded", labelKey: "settings.display.mcpTool.expanded" },
+  { value: "collapsed", labelKey: "settings.display.mcpTool.collapsed" },
+]
+
+const REASONING_OPTIONS: LayoutOption[] = [
+  { value: "expanded", labelKey: "settings.display.reasoningDisplay.expanded" },
+  { value: "preview", labelKey: "settings.display.reasoningDisplay.preview" },
+  { value: "headline", labelKey: "settings.display.reasoningDisplay.headline" },
+]
+
 const DisplayTab: Component = () => {
-  const { config, updateConfig } = useConfig()
+  const { config, updateConfig, settings, updateSetting } = useConfig()
   const display = useDisplay()
   const language = useLanguage()
 
@@ -64,18 +75,63 @@ const DisplayTab: Component = () => {
         </SettingsRow>
 
         <SettingsRow
-          title={language.t("settings.display.reasoningAutoCollapse.title")}
-          description={language.t("settings.display.reasoningAutoCollapse.description")}
+          title={language.t("settings.display.shiftTabCycle.title")}
+          description={language.t("settings.display.shiftTabCycle.description")}
         >
           <Switch
-            checked={display.reasoningAutoCollapse()}
-            onChange={(checked: boolean) => {
-              display.setReasoningAutoCollapse(checked)
-            }}
+            checked={Boolean(settings()["chat.shiftTabCyclesVariant"] ?? true)}
+            onChange={(checked: boolean) => updateSetting("chat.shiftTabCyclesVariant", checked)}
             hideLabel
           >
-            {language.t("settings.display.reasoningAutoCollapse.title")}
+            {language.t("settings.display.shiftTabCycle.title")}
           </Switch>
+        </SettingsRow>
+
+        <SettingsRow
+          title={language.t("settings.display.tokenThroughput.title")}
+          description={language.t("settings.display.tokenThroughput.description")}
+        >
+          <Switch
+            checked={Boolean(settings()["showTokenThroughput"] ?? true)}
+            onChange={(checked: boolean) => updateSetting("showTokenThroughput", checked)}
+            hideLabel
+          >
+            {language.t("settings.display.tokenThroughput.title")}
+          </Switch>
+        </SettingsRow>
+
+        <SettingsRow
+          title={language.t("settings.display.autoApprovalReason.title")}
+          description={language.t("settings.display.autoApprovalReason.description")}
+        >
+          <Switch
+            checked={Boolean(settings()["showAutoApprovalReason"] ?? true)}
+            onChange={(checked: boolean) => updateSetting("showAutoApprovalReason", checked)}
+            hideLabel
+          >
+            {language.t("settings.display.autoApprovalReason.title")}
+          </Switch>
+        </SettingsRow>
+
+        <SettingsRow
+          title={language.t("settings.display.reasoningDisplay.title")}
+          description={language.t("settings.display.reasoningDisplay.description")}
+        >
+          <Select
+            options={REASONING_OPTIONS}
+            current={REASONING_OPTIONS.find((o) => o.value === display.reasoningDisplay())}
+            value={(o) => o.value}
+            label={(o) => language.t(o.labelKey)}
+            onSelect={(o) => {
+              if (!o) return
+              const next = o.value as ReasoningDisplay
+              if (next === display.reasoningDisplay()) return
+              display.setReasoningDisplay(next)
+            }}
+            variant="secondary"
+            size="small"
+            triggerVariant="settings"
+          />
         </SettingsRow>
 
         <SettingsRow
@@ -102,7 +158,6 @@ const DisplayTab: Component = () => {
         <SettingsRow
           title={language.t("settings.display.codeEdit.title")}
           description={language.t("settings.display.codeEdit.description")}
-          last
         >
           <Select
             options={CODE_EDIT_OPTIONS}
@@ -114,6 +169,28 @@ const DisplayTab: Component = () => {
               const next = o.value as CodeEditDisplay
               if (next === (config().code_edit_display ?? "collapsed")) return
               updateConfig({ code_edit_display: next })
+            }}
+            variant="secondary"
+            size="small"
+            triggerVariant="settings"
+          />
+        </SettingsRow>
+
+        <SettingsRow
+          title={language.t("settings.display.mcpTool.title")}
+          description={language.t("settings.display.mcpTool.description")}
+          last
+        >
+          <Select
+            options={MCP_OPTIONS}
+            current={MCP_OPTIONS.find((o) => o.value === (config().mcp_tool_display ?? "collapsed"))}
+            value={(o) => o.value}
+            label={(o) => language.t(o.labelKey)}
+            onSelect={(o) => {
+              if (!o) return
+              const next = o.value as McpToolDisplay
+              if (next === (config().mcp_tool_display ?? "collapsed")) return
+              updateConfig({ mcp_tool_display: next })
             }}
             variant="secondary"
             size="small"
